@@ -7,6 +7,8 @@ on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: [ master ]
+    tags:
+      - 'v*'
   pull_request:
     branches: [ master ]
 
@@ -29,9 +31,9 @@ jobs:
         id: version
         run: echo "::set-output name=version::$(cat version | grep "version =" | cut -f 2 -d "'")"
         shell: bash
-      - name: Else snapshot
-        if: ${{ !contains(steps.version.outputs.version, 'SNAPSHOT') }}
-        run: echo "SNAPSHOT!"
       - name: If snapshot
         if: contains(steps.version.outputs.version, 'SNAPSHOT')
         run: echo foo
+      - name: Release
+        if: ${{ !contains(steps.version.outputs.version, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.version) }}
+        run: echo release
