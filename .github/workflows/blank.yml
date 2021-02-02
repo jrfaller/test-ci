@@ -24,8 +24,14 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-
       # Runs a single command using the runners shell
       - name: Check version
+        id: version
         run: echo "::set-output name=version::$(cat version | grep "version =" | cut -f 2 -d "'")"
-        shell: bash 
+        shell: bash
+      - name: Else snapshot
+        if: ${{ !contains(steps.version.outputs.version, 'SNAPSHOT') }}
+        run: echo "SNAPSHOT!"
+      - name: If snapshot
+        if: contains(steps.version.outputs.version, 'SNAPSHOT')
+        run: echo "SNAPSHOT!""
