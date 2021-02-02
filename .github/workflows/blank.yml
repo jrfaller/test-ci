@@ -38,6 +38,6 @@ jobs:
         if: ${{ !contains(steps.version.outputs.version, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.version) }}
         uses: ncipollo/release-action@v1
         with:
-          artifact: "version"
+          artifacts: "version"
           bodyFile: "CHANGELOG.md"
           token: ${{ secrets.GITHUB_TOKEN }}
