@@ -27,4 +27,5 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Check version
-        run: cat version | grep "version =" | cut -f 2 -d "'"
+        run: echo "::set-output name=version::$(cat version | grep "version =" | cut -f 2 -d "'")"
+        shell: bash 
