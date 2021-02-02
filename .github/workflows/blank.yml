@@ -14,6 +14,8 @@ on:
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+  schedule:
+    - cron:  '* * * * *'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -34,6 +36,12 @@ jobs:
       - name: If snapshot
         if: contains(steps.version.outputs.version, 'SNAPSHOT')
         run: echo foo
+      - name: If schedule
+        if: ${{ github.event_name == 'schedule' }}
+        run: echo schedule
+      - name: If dispatch
+        if: ${{ github.event_name == 'workflow_dispatch' }}
+        run: echo dispatch
       - name: Release
         if: ${{ !contains(steps.version.outputs.version, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.version) }}
         uses: ncipollo/release-action@v1
