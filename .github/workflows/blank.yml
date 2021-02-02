@@ -36,4 +36,8 @@ jobs:
         run: echo foo
       - name: Release
         if: ${{ !contains(steps.version.outputs.version, 'SNAPSHOT') && endsWith(github.ref, steps.version.outputs.version) }}
-        run: echo release
+        uses: ncipollo/release-action@v1
+        with:
+          artifact: "version"
+          bodyFile: "CHANGELOG.md"
+          token: ${{ secrets.GITHUB_TOKEN }}
